@@ -4,3 +4,5 @@ build
 dist
 itchat_desktop.egg-info
 venv
+
+*.pyc
