@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="itchat_desktop",
-    version="1.1",
+    version="1.2",
     description="wechat sdk",
     long_description="desktop mod for itchat",
     license="MIT Licence",

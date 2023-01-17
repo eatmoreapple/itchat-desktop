@@ -11,11 +11,9 @@ pip install itchat-desktop
 ## 使用
 
 ```python
-import itchat_desktop
+import itchat_desktop as itchat
 
-import itchat
-
-itchat_desktop.patch()
+itchat.patch()
 
 itchat.auto_login()
 
@@ -24,4 +22,4 @@ itchat.send('Hello, filehelper', toUserName='filehelper')
 
 ## 说明
 
-在你的项目开始的时候，调用 `itchat_desktop.patch()` 即可。别的地方不需要做任何修改。
+在你的项目开始的时候，调用 `itchat.patch()` 即可。别的地方不需要做任何修改。
