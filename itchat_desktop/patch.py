@@ -31,4 +31,5 @@ def patch() -> None:
     Core.process_login_info = components.process_login_info
     Core.check_login = components.check_login
     Core.push_login = components.push_login
+    Core.add_friend = components.add_friend
     itchat.originInstance = itchat.new_instance()

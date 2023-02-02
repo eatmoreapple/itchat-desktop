@@ -1,14 +1,16 @@
+import json
 import re
 import time
 import xml
 import xml.dom.minidom
 import random
 
-from typing import Union
+from typing import Union, Optional, Dict
 
 import itchat
 from itchat import config
 from itchat.components.login import logger
+from itchat.returnvalues import ReturnValue
 
 
 def get_qr_uuid(self: itchat.Core) -> str:
@@ -126,3 +128,36 @@ def push_login(core: itchat.Core) -> Union[bool, str]:
             core.uuid = r['uuid']
             return r['uuid']
     return False
+
+
+def add_friend(self: itchat.Core, userName: str, status: int = 3, verifyContent: str = '',
+               autoUpdate: Optional[Dict] = None) -> ReturnValue:
+    ''' Add a friend or accept a friend
+        * for adding status should be 2
+        * for accepting status should be 3
+    '''
+    url = '%s/webwxverifyuser?r=%s&pass_ticket=%s' % (
+        self.loginInfo['url'], int(time.time()), self.loginInfo['pass_ticket'])
+    ticket = ""
+    if autoUpdate:
+        assert isinstance(autoUpdate, dict), 'autoUpdate should be a dict'
+        ticket = autoUpdate['Ticket']
+    data = {
+        'BaseRequest': self.loginInfo['BaseRequest'],
+        'Opcode': status,  # 3
+        'VerifyUserListSize': 1,
+        'VerifyUserList': [{
+            'Value': userName,
+            'VerifyUserTicket': ticket, }],
+        'VerifyContent': verifyContent,
+        'SceneListCount': 1,
+        'SceneList': [33],
+        'skey': self.loginInfo['skey'], }
+    headers = {
+        'ContentType': 'application/json; charset=UTF-8',
+        'User-Agent': config.USER_AGENT}
+    r = self.s.post(url, headers=headers,
+                    data=json.dumps(data, ensure_ascii=False).encode('utf8', 'replace'))
+    if autoUpdate:
+        self.update_friend(userName)
+    return ReturnValue(rawResponse=r)
